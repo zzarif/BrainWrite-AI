@@ -11,7 +11,7 @@ const port = 5000;
 
 const configuration = new Configuration({
     organization: "org-h7YLCmGP3QzeuXlZkbpjCTOA",
-    apiKey: "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",
+    apiKey: "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",
 });
 const openai = new OpenAIApi(configuration);
 
@@ -27,7 +27,7 @@ app.post('/', async (req, res) => {
         model: "text-davinci-003",
         prompt: `${message}`,
         max_tokens: 100,
-        temperature: 0
+        temperature: 0.5
     });
     console.log(response.data)
     if(response.data.choices[0].text) {

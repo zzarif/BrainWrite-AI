@@ -1,3 +1,133 @@
 .s-label {
     font-size: 10px;
 }
+
+
+.header {
+    background-color: #39434F;
+    min-height: 60px;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.container-1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #232A32;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.container-2 {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    background-color: #1A1F25;
+}
+
+
+.text-label {
+    color: white;
+    font-size: large;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem;
+}
+
+.div-label-select {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+select {
+    font-size: large;
+    border-radius: 0.5rem;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem 1rem;
+    color: #C7C7C7;
+    border-style: solid;
+    border-width: 2px;
+    background-color: transparent;
+    border-color: #C7C7C7;
+}
+
+option {
+    font-size: large;
+    color: #C7C7C7;
+    background-color: #232A32;
+}
+
+.input-box {
+  font-family: 'Roboto', sans-serif;
+  min-height: 80px;
+  font-size: large;
+  padding: 1.5rem 2rem;
+  color: #C7C7C7;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-width: 2px;
+  background-color: transparent;
+  border-color: #C7C7C7;
+  transition: all 0.3s;
+}
+
+.input-box-small {
+  font-family: 'Roboto', sans-serif;
+  font-size: large;
+  padding: 0.5rem 2rem;
+  color: #C7C7C7;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-width: 2px;
+  background-color: transparent;
+  border-color: #C7C7C7;
+  transition: all 0.3s;
+}
+
+
+
+.button-22 {
+  align-items: center;
+  appearance: button;
+  background-color: #0276FF;
+  border-radius: 8px;
+  border-style: none;
+  box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  font-family: "RM Neue",sans-serif;
+  font-size: x-large;
+  line-height: 1.15;
+  margin: 0;
+  padding: 10px 21px;
+  text-align: center;
+  text-transform: none;
+  transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-22:active {
+  background-color: #006AE8;
+}
+
+.button-22:hover {
+  background-color: #1C84FF;
+}
+
+
+.div-response {
+    padding: 2rem;
+    font-family: 'Roboto', sans-serif;
+    font-size: x-large;
+    color: #C7C7C7;
+}
