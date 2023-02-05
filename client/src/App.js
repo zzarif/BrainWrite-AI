@@ -1,25 +1,12 @@
 import React, { useState } from "react";
+import Select from 'react-select';
+import { sectionList, tones } from "./consts/constants";
+import { multiSelectStyles } from "./consts/custom_styles";
 import "./styles/app.css";
 
-const copyFors = [
-  "Website",
-  "Mobile Application",
-  "Software",
-  "Presentation",
-  "Social Media Post",
-];
-const copyTypes = [
-  "Heading",
-  "Sub-heading",
-  "Product Description",
-  "Customer Review",
-];
-const tones = ["Formal", "Informative", "Persuasive"];
-
 function App() {
-  const [selectedCopyFor, setSelectedCopyFor] = useState(copyFors[0]);
   const [companyName, setCompanyName] = useState("");
-  const [selectedCopyType, setSelectedCopyType] = useState(copyTypes[0]);
+  const [selectedSections, setSelectedSections] = useState([]);
   const [selectedTone, setSelectedTone] = useState(tones[0]);
 
   const [message, setMessage] = useState("");
@@ -46,18 +33,11 @@ function App() {
       <div className="container">
         <div className="container-1">
           <div className="div-label-select">
-            <label className="text-label">Copy For</label>
-            <select
-              onChange={(e) => {
-                setSelectedCopyFor(e.target.value);
-              }}
-            >
-              {copyFors &&
-                copyFors.map((item) => (
-                  <option>{item}</option>
-                ))}
-            </select>
-          </div>{/* copy for */}
+            <label className="text-label-large">
+              Generate Copy for Website
+            </label>
+          </div>
+          {/* copy for */}
           <div className="div-label-select">
             <label className="text-label">Company/Product Name</label>
             <input
@@ -65,17 +45,28 @@ function App() {
               placeholder="Ex: BrainWrite"
               onChange={(e) => setCompanyName(e.target.value)}
             />
-          </div>{/* company name */}
+          </div>
+          {/* company name */}
           <div className="div-label-select">
-            <label className="text-label">Copy Type</label>
-            <select
-              onChange={(e) => {
-                setSelectedCopyType(e.target.value);
-              }}
-            >
-              {copyTypes && copyTypes.map((item) => <option>{item}</option>)}
-            </select>
-          </div>{/* copy type */}
+            <label className="text-label">Sections</label>
+            <Select
+              name="Sections"
+              placeholder="Ex. Heading"
+              styles={multiSelectStyles}
+              value={sectionList.filter((obj) =>
+                selectedSections.includes(obj.label)
+              )} // set selected values
+              options={sectionList} // set list of the data
+              onChange={(e) =>
+                setSelectedSections(
+                  Array.isArray(e) ? e.map((x) => x.label) : []
+                )
+              } // assign onChange function
+              isMulti
+              isClearable
+            />
+          </div>
+          {/* copy type */}
           <div className="div-label-select">
             <label className="text-label">Short Description</label>
 
@@ -84,7 +75,8 @@ function App() {
               placeholder="What your website is about. Use bullet points or short sentences."
               onChange={(e) => setMessage(e.target.value)}
             />
-          </div>{/* description */}
+          </div>
+          {/* description */}
           <div className="div-label-select">
             <label className="text-label">Tone</label>
             <select
@@ -94,7 +86,8 @@ function App() {
             >
               {tones && tones.map((item) => <option>{item}</option>)}
             </select>
-          </div>{/* tone */}
+          </div>
+          {/* tone */}
           <button className="button-22" onClick={handleSubmit}>
             Write for me
           </button>
@@ -102,13 +95,11 @@ function App() {
 
         <div className="container-2">
           <div className="div-response">
-            <b>Copy For: </b> {selectedCopyFor}
-          </div>
-          <div className="div-response">
             <b>Company Name: </b> {companyName}
           </div>
           <div className="div-response">
-            <b>Copy Type:</b> {selectedCopyType}
+            <b>Sections:</b>{" "}
+            {selectedSections && JSON.stringify(selectedSections, null, 2)}
           </div>
           <div className="div-response">
             <b>Tone: </b> {selectedTone}

@@ -37,6 +37,13 @@
     padding: 0.5rem;
 }
 
+.text-label-large {
+    color: white;
+    font-size: xx-large;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5rem;
+}
+
 .div-label-select {
     width: 90%;
     display: flex;
