@@ -1,11 +1,9 @@
-import chroma from 'chroma-js'
-
-export const multiSelectStyles = {
+export const multiSelectStyle = {
   control: (base, state) => ({
     ...base,
     background: "transparent",
     borderRadius: "0.5rem",
-    padding: "0.2rem 1rem",
+    padding: "0.2rem 0.2rem",
     fontFamily: "'Roboto', sans-serif",
     // Overwrittes the different states of border
     borderColor: state.isFocused ? "yellow" : "#C7C7C7",
@@ -15,5 +13,14 @@ export const multiSelectStyles = {
       // Overwrittes the different states of border
       borderColor: state.isFocused ? "red" : "blue",
     },
+  }),
+  option: (provided) => ({
+    ...provided,
+    color: 'black',
+    fontFamily: "'Roboto', sans-serif",
+  }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "#C7C7C7",
   }),
 };

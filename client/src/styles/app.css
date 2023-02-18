@@ -5,7 +5,10 @@
 
 .header {
     background-color: #39434F;
-    min-height: 60px;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    padding: 1rem;
+    font-size: large;
 }
 
 .container {
@@ -18,7 +21,6 @@
     display: flex;
     flex-direction: column;
     background-color: #232A32;
-    justify-content: space-around;
     align-items: center;
 }
 
@@ -39,15 +41,17 @@
 
 .text-label-large {
     color: white;
-    font-size: xx-large;
+    font-size: x-large;
     font-family: 'Roboto', sans-serif;
     padding: 0.5rem;
+    margin-top: 20px;
 }
 
 .div-label-select {
     width: 90%;
     display: flex;
     flex-direction: column;
+    margin-bottom: 40px;
 }
 
 select {
@@ -72,11 +76,11 @@ option {
   font-family: 'Roboto', sans-serif;
   min-height: 80px;
   font-size: large;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 1rem;
   color: #C7C7C7;
   border-radius: 0.5rem;
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
   background-color: transparent;
   border-color: #C7C7C7;
   transition: all 0.3s;
@@ -85,11 +89,11 @@ option {
 .input-box-small {
   font-family: 'Roboto', sans-serif;
   font-size: large;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1rem;
   color: #C7C7C7;
   border-radius: 0.5rem;
   border-style: solid;
-  border-width: 2px;
+  border-width: 1px;
   background-color: transparent;
   border-color: #C7C7C7;
   transition: all 0.3s;
@@ -113,7 +117,7 @@ option {
   font-family: "RM Neue",sans-serif;
   font-size: x-large;
   line-height: 1.15;
-  margin: 0;
+  margin-top: 20px;
   padding: 10px 21px;
   text-align: center;
   text-transform: none;
