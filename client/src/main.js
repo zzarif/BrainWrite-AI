@@ -8,24 +8,30 @@ import {
   loadEcomCopyList,
   loadPortfolioCopyList,
 } from "./apis/selectDataLoader";
+import { fetchPromptResponse } from "./apis/fetchPromptResponse";
 import "./styles/app.css";
 
 function App() {
   const [companyName, setCompanyName] = useState(""); // Company Name
   const [companyDesc, setCompanyDesc] = useState(""); // Company Description
-  const [selectedWebsiteType, setSelectedWebsiteType] = useState(-1); // Selected Website Type (def:: SaaS)
-  const [selectedCopy, setSelectedCopy] = useState(-1); // Selected Copy from Copy List
+  const [selectedWebsiteType, setSelectedWebsiteType] = useState(""); // Selected Website Type
+  const [selectedCopy, setSelectedCopy] = useState(""); // Selected Copy from Copy List
 
   const [response, setResponse] = useState(""); // OpenAI response
 
-  const handleSubmit = (e) => {
+  const getResponse = async (e) => {
     e.preventDefault();
-    fetch("/", {
+    await fetch("/api/prompt/saasHeroTitle", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message: companyDesc }),
+      body: JSON.stringify({
+        companyName: companyName,
+        companyDesc: companyDesc,
+        websiteType: selectedWebsiteType,
+        copyType: selectedCopy,
+      }),
     })
       .then((res) => res.json())
       .then((data) => setResponse(data.message));
@@ -33,48 +39,45 @@ function App() {
 
   const CopySelect = () => {
     // SAAS
-    if (selectedWebsiteType === 0) {
+    if (selectedWebsiteType === "SaaS") {
       return (
         <AsyncSelect
           placeholder="Select Copy Type"
           loadOptions={loadSaaSCopyList}
-          onChange={(e) => setSelectedCopy(e.value)}
+          onChange={(e) => setSelectedCopy(e.label)}
           styles={multiSelectStyle}
           defaultOptions
         />
       );
-    } 
+    }
     // E-COMMERCE
-    else if (selectedWebsiteType === 1) {
+    else if (selectedWebsiteType === "E-commerce") {
       return (
         <AsyncSelect
           placeholder="Select Copy Type"
           loadOptions={loadEcomCopyList}
-          onChange={(e) => setSelectedCopy(e.value)}
+          onChange={(e) => setSelectedCopy(e.label)}
           styles={multiSelectStyle}
           defaultOptions
         />
       );
-    } 
+    }
     // PORTFOLIO
-    else if (selectedWebsiteType === 2) {
+    else if (selectedWebsiteType === "Portfolio") {
       return (
         <AsyncSelect
           placeholder="Select Copy Type"
           loadOptions={loadPortfolioCopyList}
-          onChange={(e) => setSelectedCopy(e.value)}
+          onChange={(e) => setSelectedCopy(e.label)}
           styles={multiSelectStyle}
           defaultOptions
         />
       );
-    } 
+    }
     // if nothing selected
     else {
       return (
-        <Select
-          placeholder="Select Copy Type"
-          styles={multiSelectStyle}
-        />
+        <Select placeholder="Select Copy Type" styles={multiSelectStyle} />
       );
     }
   };
@@ -116,20 +119,21 @@ function App() {
             <AsyncSelect
               placeholder="Select Website Type"
               loadOptions={loadWebsiteTypeList}
-              onChange={(e) => setSelectedWebsiteType(e.value)}
+              onChange={(e) => setSelectedWebsiteType(e.label)}
               styles={multiSelectStyle}
               defaultOptions
             />
           </div>
           {/* website type */}
-          
+
           <div className="div-label-select">
             <label className="text-label">Select Copy</label>
-            <CopySelect/>
+            <CopySelect />
           </div>
           {/* copy type */}
-          <button className="button-22" onClick={handleSubmit}>
-            Write for me
+          <button
+            className="button-22" onClick={getResponse}>
+            Generate
           </button>
         </div>
 

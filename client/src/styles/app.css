@@ -84,6 +84,7 @@ option {
   background-color: transparent;
   border-color: #C7C7C7;
   transition: all 0.3s;
+  resize: none;
 }
 
 .input-box-small {
