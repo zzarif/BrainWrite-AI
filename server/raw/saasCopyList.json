@@ -1,0 +1,42 @@
+[
+  {
+    "value": 0,
+    "label": "Hero Title"
+  },
+  {
+    "value": 1,
+    "label": "Customer Review/Testimonial"
+  },
+  {
+    "value": 2,
+    "label": "Features Page"
+  },
+  {
+    "value": 3,
+    "label": "Demo Page"
+  },
+  {
+    "value": 4,
+    "label": "Customer Success Story"
+  },
+  {
+    "value": 5,
+    "label": "Team Copy"
+  },
+  {
+    "value": 6,
+    "label": "Documentation/Tutorials"
+  },
+  {
+    "value": 7,
+    "label": "FAQ"
+  },
+  {
+    "value": 8,
+    "label": "Mission/Vision/Values"
+  },
+  {
+    "value": 9,
+    "label": "Sample Terms and Condition/Return policy"
+  }
+]

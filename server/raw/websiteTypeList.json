@@ -1,0 +1,14 @@
+[
+  {
+    "value": 0,
+    "label": "SaaS"
+  },
+  {
+    "value": 1,
+    "label": "E-commerce"
+  },
+  {
+    "value": 2,
+    "label": "Portfolio"
+  }
+]

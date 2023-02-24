@@ -1,13 +1,15 @@
+import * as api_endpoints from "../consts/api_endpoints";
+
 // fetches Website Type List from backend
 // @props-> searchValue: the value being searched
 // @returns -> list of website types 
 export const loadWebsiteTypeList = (searchValue, callback) => {
     setTimeout(async () => {
-        const data = await fetch("/api/select/websiteTypeList", {
+        const data = await fetch(api_endpoints.WEBSITE_TYPE_LIST, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-            },
+              },
             })
             .then((response) => response.json())
             .then((objectList) => objectList.filter(
@@ -22,7 +24,7 @@ export const loadWebsiteTypeList = (searchValue, callback) => {
 // fetches SAAS Copy List from backend
 export const loadSaaSCopyList = (searchValue, callback) => {
   setTimeout(async () => {
-    const data = await fetch("/api/select/saasCopyList", {
+    const data = await fetch(api_endpoints.SAAS_COPY_LIST, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +44,7 @@ export const loadSaaSCopyList = (searchValue, callback) => {
 // fetches E-COMMERCE Copy List from backend
 export const loadEcomCopyList = (searchValue, callback) => {
   setTimeout(async () => {
-    const data = await fetch("/api/select/ecomCopyList", {
+    const data = await fetch(api_endpoints.ECOM_COPY_LIST, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +64,7 @@ export const loadEcomCopyList = (searchValue, callback) => {
 // fetches PORTFOLIO Copy List from backend
 export const loadPortfolioCopyList = (searchValue, callback) => {
   setTimeout(async () => {
-    const data = await fetch("/api/select/portfolioCopyList", {
+    const data = await fetch(api_endpoints.PORTFOLIO_COPY_LIST, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

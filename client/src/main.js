@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
+import ClipLoader from "react-spinners/ClipLoader";
 import { multiSelectStyle } from "./consts/custom_styles";
 import {
   loadWebsiteTypeList,
@@ -8,78 +9,44 @@ import {
   loadEcomCopyList,
   loadPortfolioCopyList,
 } from "./apis/selectDataLoader";
-import { fetchPromptResponse } from "./apis/fetchPromptResponse";
+import resolveAPI from "./consts/api_endpoints";
 import "./styles/app.css";
 
 function App() {
   const [companyName, setCompanyName] = useState(""); // Company Name
   const [companyDesc, setCompanyDesc] = useState(""); // Company Description
-  const [selectedWebsiteType, setSelectedWebsiteType] = useState(""); // Selected Website Type
-  const [selectedCopy, setSelectedCopy] = useState(""); // Selected Copy from Copy List
+  const [websiteType, setWebsiteType] = useState(-1); // Selected Website Type
+  const [copy, setCopy] = useState(-1); // Selected Copy from Copy List
+  
+  const [loading, setLoading] = useState(false); // Spinner
 
   const [response, setResponse] = useState(""); // OpenAI response
 
-  const getResponse = async (e) => {
-    e.preventDefault();
-    await fetch("/api/prompt/saasHeroTitle", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        companyName: companyName,
-        companyDesc: companyDesc,
-        websiteType: selectedWebsiteType,
-        copyType: selectedCopy,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => setResponse(data.message));
-  };
+  const getOpenAIResponse = () => {
 
-  const CopySelect = () => {
-    // SAAS
-    if (selectedWebsiteType === "SaaS") {
-      return (
-        <AsyncSelect
-          placeholder="Select Copy Type"
-          loadOptions={loadSaaSCopyList}
-          onChange={(e) => setSelectedCopy(e.label)}
-          styles={multiSelectStyle}
-          defaultOptions
-        />
-      );
-    }
-    // E-COMMERCE
-    else if (selectedWebsiteType === "E-commerce") {
-      return (
-        <AsyncSelect
-          placeholder="Select Copy Type"
-          loadOptions={loadEcomCopyList}
-          onChange={(e) => setSelectedCopy(e.label)}
-          styles={multiSelectStyle}
-          defaultOptions
-        />
-      );
-    }
-    // PORTFOLIO
-    else if (selectedWebsiteType === "Portfolio") {
-      return (
-        <AsyncSelect
-          placeholder="Select Copy Type"
-          loadOptions={loadPortfolioCopyList}
-          onChange={(e) => setSelectedCopy(e.label)}
-          styles={multiSelectStyle}
-          defaultOptions
-        />
-      );
-    }
-    // if nothing selected
-    else {
-      return (
-        <Select placeholder="Select Copy Type" styles={multiSelectStyle} />
-      );
-    }
+    setLoading(true);
+
+    console.log(`{${companyName}, ${companyDesc}, ${websiteType}, ${copy}}`);
+
+    setTimeout(async () => {
+      await fetch(resolveAPI(websiteType, copy), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyName: companyName,
+          companyDesc: companyDesc,
+          websiteType: websiteType,
+          copy: copy,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => setResponse(data.message));
+
+      setLoading(false);
+      
+    }, 3000);
   };
 
   return (
@@ -93,6 +60,7 @@ function App() {
             </label>
           </div>
 
+          {/* company name */}
           <div className="div-label-select">
             <label className="text-label">Company Name</label>
             <input
@@ -101,8 +69,8 @@ function App() {
               onChange={(e) => setCompanyName(e.target.value)}
             />
           </div>
-          {/* company name */}
 
+          {/* company description */}
           <div className="div-label-select">
             <label className="text-label">Short Description</label>
 
@@ -112,46 +80,77 @@ function App() {
               onChange={(e) => setCompanyDesc(e.target.value)}
             />
           </div>
-          {/* company description */}
 
+          {/* website type */}
           <div className="div-label-select">
             <label className="text-label">Website Type</label>
             <AsyncSelect
               placeholder="Select Website Type"
               loadOptions={loadWebsiteTypeList}
-              onChange={(e) => setSelectedWebsiteType(e.label)}
+              onChange={(e) => {
+                setWebsiteType(e.value);
+                setCopy(-1);
+              }}
               styles={multiSelectStyle}
               defaultOptions
             />
           </div>
-          {/* website type */}
 
+          {/* copy type */}
           <div className="div-label-select">
             <label className="text-label">Select Copy</label>
-            <CopySelect />
+            {websiteType === 0 && (
+              <AsyncSelect
+                placeholder="Select Copy Type"
+                loadOptions={loadSaaSCopyList}
+                onChange={(e) => setCopy(e.value)}
+                styles={multiSelectStyle}
+                defaultOptions
+              />
+            )}
+            {websiteType === 1 && (
+              <AsyncSelect
+                placeholder="Select Copy Type"
+                loadOptions={loadEcomCopyList}
+                onChange={(e) => setCopy(e.value)}
+                styles={multiSelectStyle}
+                defaultOptions
+              />
+            )}
+            {websiteType === 2 && (
+              <AsyncSelect
+                placeholder="Select Copy Type"
+                loadOptions={loadPortfolioCopyList}
+                onChange={(e) => setCopy(e.value)}
+                styles={multiSelectStyle}
+                defaultOptions
+              />
+            )}
+            {websiteType === -1 && (
+              <Select
+                placeholder="Select Copy Type"
+                styles={multiSelectStyle}
+              />
+            )}
           </div>
-          {/* copy type */}
-          <button
-            className="button-22" onClick={getResponse}>
+
+          {/* Generate button */}
+          <button className="button-22" onClick={getOpenAIResponse}>
             Generate
           </button>
         </div>
 
         <div className="container-2">
           <div className="div-response">
-            <b>Company Name: </b> {companyName}
-          </div>
-          <div className="div-response">
-            <b>Description: </b> {companyDesc}
-          </div>
-          <div className="div-response">
-            <b>Website Type: </b> {selectedWebsiteType}
-          </div>
-          <div className="div-response">
-            <b>Website Type: </b> {selectedCopy}
-          </div>
-          <div className="div-response">
-            <b>OpenAI Response:</b> {response}
+            {loading ? (
+              <ClipLoader 
+              color={"maroon"} 
+              loading={loading} 
+              size={150}
+              />
+            ) : (
+              response
+            )}
           </div>
         </div>
       </div>
