@@ -1,0 +1,62 @@
+[
+    {
+        "value": 0,
+        "label": "Design"
+    },
+    {
+        "value": 1,
+        "label": "Business"
+    },
+    {
+        "value": 2,
+        "label": "Technology"
+    },
+    {
+        "value": 3,
+        "label": "Blog"
+    },
+    {
+        "value": 4,
+        "label": "Marketing"
+    },
+    {
+        "value": 5,
+        "label": "Photography and Video"
+    },
+    {
+        "value": 6,
+        "label": "Entertainment"
+    },
+    {
+        "value": 7,
+        "label": "Food and Drink"
+    },
+    {
+        "value": 8,
+        "label": "Travel"
+    },
+    {
+        "value": 9,
+        "label": "Education"
+    },
+    {
+        "value": 10,
+        "label": "Sports"
+    },
+    {
+        "value": 11,
+        "label": "Medical"
+    },
+    {
+        "value": 12,
+        "label": "Nonprofit"
+    },
+    {
+        "value": 13,
+        "label": "Beauty and Wellness"
+    },
+    {
+        "value": 14,
+        "label": "Fashion"
+    }
+]

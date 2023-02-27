@@ -1,14 +1,38 @@
 [
   {
     "value": 0,
-    "label": "pf1"
+    "label": "Hero Title"
   },
   {
     "value": 1,
-    "label": "pf2"
+    "label": "Sample Terms and Conditions"
   },
   {
     "value": 2,
-    "label": "pf3"
+    "label": "Mission - Vision - Values"
+  },
+  {
+    "value": 3,
+    "label": "FAQ (Frequently Asked Questions)"
+  },
+  {
+    "value": 4,
+    "label": "Sample Legal Copy"
+  },
+  {
+    "value": 5,
+    "label": "Sample Privacy Policy"
+  },
+  {
+    "value": 6,
+    "label": "Company History"
+  },
+  {
+    "value": 7,
+    "label": "Project Description"
+  },
+  {
+    "value": 8,
+    "label": "Skill Copy/CV/Portfolio"
   }
 ]

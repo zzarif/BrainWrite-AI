@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 import ClipLoader from "react-spinners/ClipLoader";
-import { multiSelectStyle } from "./consts/custom_styles";
+import { multiSelectStyle } from "./constants/custom_styles";
 import {
   loadWebsiteTypeList,
   loadSaaSCopyList,
-  loadEcomCopyList,
+  loadPortfolioSubList,
   loadPortfolioCopyList,
 } from "./apis/selectDataLoader";
-import resolveAPI from "./consts/api_endpoints";
+import resolveAPI from "./apis/api_endpoints";
 import "./styles/app.css";
 
 function App() {
@@ -17,16 +17,52 @@ function App() {
   const [companyDesc, setCompanyDesc] = useState(""); // Company Description
   const [websiteType, setWebsiteType] = useState(-1); // Selected Website Type
   const [copy, setCopy] = useState(-1); // Selected Copy from Copy List
-  
-  const [loading, setLoading] = useState(false); // Spinner
-
   const [response, setResponse] = useState(""); // OpenAI response
 
-  const getOpenAIResponse = () => {
+  const [loading, setLoading] = useState(false); // Spinner
 
+  ////////////////// SPECIAL COPIES /////////////////////////
+  const [teamMemberList, setTeamMemberList] = useState([]); // for SAAS team copy
+  const [category, setCategory] = useState(-1); // for PORTFOLIO
+
+
+  const getOpenAIResponseForSaaS = () => {
     setLoading(true);
 
-    console.log(`{${companyName}, ${companyDesc}, ${websiteType}, ${copy}}`);
+    console.log(`{${companyName}, ${companyDesc}, ${websiteType}, ${copy}, ${teamMemberList}}`);
+
+    const method = "POST";
+    const headers = { "Content-Type": "application/json" };
+    const body = {
+      companyName: companyName,
+      companyDesc: companyDesc,
+      websiteType: websiteType,
+      copy: copy,
+    }
+    if(copy === 9) {
+      body.teamMemberList = teamMemberList;
+    }
+
+    setTimeout(async () => {
+      await fetch(resolveAPI(websiteType, copy), {
+        method: method,
+        headers: headers,
+        body: JSON.stringify(body),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data.message);
+          setResponse(data.message);
+        });
+
+      setLoading(false);
+    }, 2000);
+  };
+
+  const getOpenAIResponseForPortfolio = () => {
+    setLoading(true);
+
+    console.log(`{${companyName}, ${companyDesc}, ${websiteType}, ${category}, ${copy}}`);
 
     setTimeout(async () => {
       await fetch(resolveAPI(websiteType, copy), {
@@ -38,15 +74,18 @@ function App() {
           companyName: companyName,
           companyDesc: companyDesc,
           websiteType: websiteType,
+          category: category,
           copy: copy,
         }),
       })
         .then((res) => res.json())
-        .then((data) => setResponse(data.message));
+        .then((data) => {
+          console.log(data.message);
+          setResponse(data.message);
+        });
 
       setLoading(false);
-      
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -76,6 +115,7 @@ function App() {
 
             <textarea
               className="input-box"
+              spellCheck={false}
               placeholder="What your website is about. Use bullet points or short sentences."
               onChange={(e) => setCompanyDesc(e.target.value)}
             />
@@ -90,11 +130,27 @@ function App() {
               onChange={(e) => {
                 setWebsiteType(e.value);
                 setCopy(-1);
+                setCategory(-1);
+                setTeamMemberList([]);
               }}
               styles={multiSelectStyle}
               defaultOptions
             />
           </div>
+
+          {/* if PORTFOLIO then show category */}
+          {websiteType === 1 && (
+              <div className="div-label-select">
+              <label className="text-label">Select Category</label>
+              <AsyncSelect
+                placeholder="Select Category"
+                loadOptions={loadPortfolioSubList}
+                onChange={(e) => setCategory(e.value)}
+                styles={multiSelectStyle}
+                defaultOptions
+              />
+            </div>
+          )}
 
           {/* copy type */}
           <div className="div-label-select">
@@ -103,7 +159,10 @@ function App() {
               <AsyncSelect
                 placeholder="Select Copy Type"
                 loadOptions={loadSaaSCopyList}
-                onChange={(e) => setCopy(e.value)}
+                onChange={(e) => {
+                  setCopy(e.value);
+                  setTeamMemberList([]);
+                }}
                 styles={multiSelectStyle}
                 defaultOptions
               />
@@ -111,17 +170,11 @@ function App() {
             {websiteType === 1 && (
               <AsyncSelect
                 placeholder="Select Copy Type"
-                loadOptions={loadEcomCopyList}
-                onChange={(e) => setCopy(e.value)}
-                styles={multiSelectStyle}
-                defaultOptions
-              />
-            )}
-            {websiteType === 2 && (
-              <AsyncSelect
-                placeholder="Select Copy Type"
                 loadOptions={loadPortfolioCopyList}
-                onChange={(e) => setCopy(e.value)}
+                onChange={(e) => {
+                  setCopy(e.value);
+                  setTeamMemberList([]);
+                }}
                 styles={multiSelectStyle}
                 defaultOptions
               />
@@ -134,20 +187,50 @@ function App() {
             )}
           </div>
 
+          {/* if SAAS - TEAM COPY */}
+          {websiteType === 0 && copy === 9 && (
+            <div className="div-team-member-list">
+              {teamMemberList.map((member, i) => {
+                  return (
+                      <div className="div-team-member">
+                          <input placeholder="Ex: Member name, Designation" 
+                                className="input_team-member" 
+                                value={member} onChange={(e) => {
+                              const newList = [...teamMemberList];
+                              newList[i] = e.target.value;
+                              setTeamMemberList(newList);
+                          }}/>
+                          <button className="button-team-member-rem" onClick={() => {
+                              const newList = [...teamMemberList];
+                              newList.splice(i,1);
+                              setTeamMemberList(newList);
+                          }}>Remove</button>
+                      </div>
+                  )
+              })}
+
+              <button className="button-team-member-add" onClick={() => {
+                const newList = [...teamMemberList,[]];
+                setTeamMemberList(newList);
+              }}>Add New Member</button>
+            </div>
+          )}
+
           {/* Generate button */}
-          <button className="button-22" onClick={getOpenAIResponse}>
+          <button className="button-22" onClick={
+            websiteType === 0? 
+            getOpenAIResponseForSaaS:
+            getOpenAIResponseForPortfolio
+          }>
             Generate
           </button>
+          
         </div>
 
         <div className="container-2">
           <div className="div-response">
             {loading ? (
-              <ClipLoader 
-              color={"maroon"} 
-              loading={loading} 
-              size={150}
-              />
+              <ClipLoader color={"maroon"} loading={loading} size={150} />
             ) : (
               response
             )}

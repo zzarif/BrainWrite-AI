@@ -9,34 +9,34 @@
   },
   {
     "value": 2,
-    "label": "Features Page"
-  },
-  {
-    "value": 3,
-    "label": "Demo Page"
-  },
-  {
-    "value": 4,
     "label": "Customer Success Story"
   },
   {
+    "value": 3,
+    "label": "Sample Terms and Conditions"
+  },
+  {
+    "value": 4,
+    "label": "Mission - Vision - Values"
+  },
+  {
     "value": 5,
-    "label": "Team Copy"
+    "label": "FAQ (Frequently Asked Questions)"
   },
   {
     "value": 6,
-    "label": "Documentation/Tutorials"
+    "label": "Documentation and Tutorials"
   },
   {
     "value": 7,
-    "label": "FAQ"
+    "label": "Features Page"
   },
   {
     "value": 8,
-    "label": "Mission/Vision/Values"
+    "label": "Demo Page"
   },
   {
     "value": 9,
-    "label": "Sample Terms and Condition/Return policy"
+    "label": "Team Copy"
   }
 ]
