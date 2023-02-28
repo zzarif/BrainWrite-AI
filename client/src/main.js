@@ -193,7 +193,7 @@ function App() {
               {teamMemberList.map((member, i) => {
                   return (
                       <div className="div-team-member">
-                          <input placeholder="Ex: Member name, Designation" 
+                          <input placeholder="Ex: John Doe, Graphics Designer" 
                                 className="input_team-member" 
                                 value={member} onChange={(e) => {
                               const newList = [...teamMemberList];

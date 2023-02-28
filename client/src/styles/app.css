@@ -167,18 +167,40 @@
 .button-team-member-rem {
     flex: 1;
     align-items: center;
-    font-size: large;
+    font-size: medium;
     font-family: 'Roboto', sans-serif;
     border-radius: 0.5rem;
     border-style: none;
     background-color: #39434F;
+    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box;
+    transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+    color: #fff;
+    cursor: pointer;
+}
+.button-team-member-rem:active{
+    background-color: #4c5158;
+}
+.button-team-member-rem:hover{
+    background-color: #474f58;
 }
 .button-team-member-add {
     align-items: center;
-    font-size: large;
+    font-size: medium;
     font-family: 'Roboto', sans-serif;
     border-radius: 0.5rem;
     border-style: none;
     padding: 8px;
     background-color: #39434F;
+    box-shadow: rgba(255, 255, 255, 0.26) 0 1px 2px inset;
+    box-sizing: border-box;
+    transition: color .13s ease-in-out,background .13s ease-in-out,opacity .13s ease-in-out,box-shadow .13s ease-in-out;
+    color: #fff;
+    cursor: pointer;
+}
+.button-team-member-add:active{
+    background-color: #4c5158;
+}
+.button-team-member-add:hover{
+    background-color: #474f58;
 }
