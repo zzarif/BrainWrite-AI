@@ -1,3 +1,5 @@
+export const baseURL = "http://localhost:5000";
+
 // async select items api endpoints
 export const WEBSITE_TYPE_LIST = "/api/select/websiteTypeList";
 export const SAAS_COPY_LIST = "/api/select/saasCopyList";

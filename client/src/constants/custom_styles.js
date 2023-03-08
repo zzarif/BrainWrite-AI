@@ -1,10 +1,11 @@
 export const multiSelectStyle = {
   control: (base, state) => ({
     ...base,
-    background: "transparent",
+    // background: "transparent",
+    marginTop: "0.3rem",
     borderRadius: "0.5rem",
-    padding: "0.2rem 0.2rem",
-    fontFamily: "'Roboto', sans-serif",
+    padding: "0.4rem",
+    fontFamily: "'TiltNeon', sans-serif",
     // Overwrittes the different states of border
     borderColor: state.isFocused ? "yellow" : "#C7C7C7",
     // Removes weird border around container
@@ -17,10 +18,10 @@ export const multiSelectStyle = {
   option: (provided) => ({
     ...provided,
     color: 'black',
-    fontFamily: "'Roboto', sans-serif",
+    fontFamily: "'TiltNeon', sans-serif",
   }),
   singleValue: (provided) => ({
     ...provided,
-    color: "#C7C7C7",
+    color: "#2C3E50",
   }),
 };

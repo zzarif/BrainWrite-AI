@@ -1,4 +1,4 @@
-import * as api_endpoints from "./api_endpoints";
+import * as api_endpoints from "../constants/api_endpoints";
 
 // fetches Website Type List from backend
 // @props-> searchValue: the value being searched

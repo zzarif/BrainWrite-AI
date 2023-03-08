@@ -2,6 +2,8 @@ const websiteTypeList = require("../raw/websiteTypeList.json");
 const saasCopyList = require("../raw/saasCopyList.json");
 const portfolioSubList = require("../raw/portfolioSubList.json");
 const portfolioCopyList = require("../raw/portfolioCopyList.json");
+const sysMsg = require("../constants/systemMessages");
+const asyncHandler = require("express-async-handler");
 
 const OpenAI = require("openai");
 const dedent = require("dedent");
@@ -13,136 +15,104 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-
 //////////////////////////////////////////////////// SAAS /////////////////////////////////////////////////////////
 
 // Prompt OpenAI Generic function
 // ONLY for SAAS NO EXAMPLE use cases
-const getSaaSGenericResponse = async (req, res) => {
-  const { companyName, companyDesc, websiteType, copy } = req.body;
+const getSaaSGenericResponse = asyncHandler(async (req, res) => {
+  const { companyName, companyDesc, websiteType, copy, context } = req.body;
 
   const sWebsiteType = websiteTypeList[websiteType].label;
   const sCopy = saasCopyList[copy].label;
 
   const prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
-    Website Type: "${sWebsiteType}"
+    Website Type: "${sWebsiteType}"`;
+  if (context) prompt += dedent`Context: ${context}`;
+  prompt += dedent`Generate "${sCopy}".`;
 
-    Write copy for "${sCopy}".`;
+  console.log(prompt + "\n" + sysMsg.SAAS_GENERIC);
 
-  console.log(prompt);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
+  const completion = await openai.createChatCompletion({
+    messages: [
+      {
+        role: "system",
+        content: sysMsg.SAAS_GENERIC,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ],
+    model: "gpt-3.5-turbo-0301",
     temperature: 0.8,
-    max_tokens: 500,
-    top_p: 1,
-    frequency_penalty: 0.3,
-    presence_penalty: 0.3,
-    best_of: 1,
-  });
-
-  console.log(response.data);
-  if (response.data.choices[0].text) {
-    res.json({
-      message: response.data.choices[0].text.trim(),
-    });
-  }
-  // res.json({});
-};
-
-// Prompt OpenAI for SAAS hero title
-// Serve SAAS hero title
-const getResponseForSaaSHeroTitle = async (req, res) => {
-  const { companyName, companyDesc, websiteType, copy } = req.body;
-
-  const sWebsiteType = websiteTypeList[websiteType].label;
-  const sCopy = saasCopyList[copy].label;
-
-  const prompt = dedent`Company Name: "${companyName}"
-    Company Description: "${companyDesc}"
-    Website Type: "${sWebsiteType}"
-
-    Write copy for "${sCopy}".
-
-    Examples:
-    Slack: "Where Work Happens. Simplify communication and collaboration, for teams of all sizes."
-    Hubspot: "Grow Better. The all-in-one marketing, sales, and service platform, designed to help you succeed."
-    Zoom: "Connect. From Anywhere. Video conferencing made it easy for remote teams and global meetings."
-    Quickbooks: "Manage Your Finances, Effortlessly. Simplify accounting, for small businesses and freelancers alike."
-    Dropbox: "Store, Sync, and Share. Keep your files and data safe, accessible, and always up-to-date."`;
-
-  console.log(prompt);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
-    temperature: 0.8,
-    max_tokens: 500,
-    top_p: 1,
-    frequency_penalty: 0.3,
-    presence_penalty: 0.3,
-    best_of: 1,
-  });
-
-  console.log(response.data);
-  if (response.data.choices[0].text) {
-    res.json({
-      message: response.data.choices[0].text.trim(),
-    });
-  }
-  // res.json({});
-};
-
-
-// Prompt OpenAI for SAAS team copy
-// Serve SAAS team copy
-const getResponseForSaaSTeamCopy = async (req, res) => {
-  const { companyName, companyDesc, websiteType, copy, teamMemberList } = req.body;
-
-  const sWebsiteType = websiteTypeList[websiteType].label;
-  const sCopy = saasCopyList[copy].label;
-  const sTeamMemberList = teamMemberList.join("\n");
-
-  const prompt = dedent`Company Name: "${companyName}"
-    Company Description: "${companyDesc}"
-    Website Type: "${sWebsiteType}"
-
-    Team Members:
-    ${sTeamMemberList}
-
-    Write copy for "${sCopy}" for the above members.`;
-
-  console.log(prompt);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
-    temperature: 0.7,
-    max_tokens: 500,
+    max_tokens: 800,
     top_p: 1,
     frequency_penalty: 0.2,
     presence_penalty: 0.2,
-    best_of: 1,
   });
-
-  console.log(response.data);
-  if (response.data.choices[0].text) {
-    res.json({
-      message: response.data.choices[0].text.trim(),
+  
+  if(completion.data.choices[0].message.content) {
+    console.log(completion.data.choices[0].message);
+    res.status(200).json({
+        message: completion.data.choices[0].message.content.trim(),
     });
   }
-  // res.json({});
-};
+  else throw new Error("Something went wrong");
+});
+
+// Prompt OpenAI for SAAS hero title
+// Serve SAAS hero title
+const getResponseForSaaSHeroTitle = asyncHandler(async (req, res) => {
+  const { companyName, companyDesc, websiteType, copy, context } = req.body;
+
+  const sWebsiteType = websiteTypeList[websiteType].label;
+  const sCopy = saasCopyList[copy].label;
+
+  const prompt = dedent`Company Name: "${companyName}"
+    Company Description: "${companyDesc}"
+    Website Type: "${sWebsiteType}"`;
+  if (context) prompt += dedent`Context: ${context}`;
+  prompt += dedent`Generate "${sCopy}".`;
+
+  console.log(prompt + "\n" + sysMsg.SAAS_HERO_TITLE);
+
+  const completion = await openai.createChatCompletion({
+    messages: [
+      {
+        role: "system",
+        content: sysMsg.SAAS_HERO_TITLE,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ],
+    model: "gpt-3.5-turbo-0301",
+    temperature: 0.8,
+    max_tokens: 256,
+    top_p: 1,
+    frequency_penalty: 0.3,
+    presence_penalty: 0.3,
+  });
+
+  if(completion.data.choices[0].message.content) {
+    console.log(completion.data.choices[0].message);
+    res.status(200).json({
+        message: completion.data.choices[0].message.content.trim(),
+    });
+  }
+  else throw new Error("Something went wrong");
+});
 
 
 //////////////////////////////////////////////////// PORTFOLIO /////////////////////////////////////////////////////////
 
 // Prompt OpenAI Generic function
 // ONLY for PORTFOLIO NO EXAMPLE use cases
-const getPortfolioGenericResponse = async (req, res) => {
-  const { companyName, companyDesc, websiteType, category, copy } = req.body;
+const getPortfolioGenericResponse = asyncHandler(async (req, res) => {
+  const { companyName, companyDesc, websiteType, category, copy, context } =
+    req.body;
 
   const sWebsiteType = websiteTypeList[websiteType].label;
   const sCategory = portfolioSubList[category].label;
@@ -151,37 +121,44 @@ const getPortfolioGenericResponse = async (req, res) => {
   const prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"
-    Category: "${sCategory}"
+    Category: "${sCategory}"`;
+  if (context) prompt += dedent`Context: ${context}`;
+  prompt += dedent`Generate "${sCopy}".`;
 
-    Write copy for "${sCopy}".`;
+  console.log(prompt + "\n" + sysMsg.PORTFOLIO_GENERIC);
 
-  console.log(prompt);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
+  const completion = await openai.createChatCompletion({
+    messages: [
+      {
+        role: "system",
+        content: sysMsg.PORTFOLIO_GENERIC,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ],
+    model: "gpt-3.5-turbo-0301",
     temperature: 0.8,
     max_tokens: 800,
     top_p: 1,
-    frequency_penalty: 0.3,
-    presence_penalty: 0.3,
-    best_of: 1,
+    frequency_penalty: 0.2,
+    presence_penalty: 0.2,
   });
 
-  console.log(response.data);
-  if (response.data.choices[0].text) {
-    res.json({
-      message: response.data.choices[0].text.trim(),
+  if(completion.data.choices[0].message.content) {
+    console.log(completion.data.choices[0].message);
+    res.status(200).json({
+        message: completion.data.choices[0].message.content.trim(),
     });
   }
-  // res.json({});
-};
-
+  else throw new Error("Something went wrong");
+});
 
 // Prompt OpenAI for PORTFOLIO hero title
 // Serve PORTFOLIO hero title
-const getResponseForPortfolioHeroTitle = async (req, res) => {
-  const { companyName, companyDesc, websiteType, category, copy } = req.body;
+const getResponseForPortfolioHeroTitle = asyncHandler(async (req, res) => {
+  const { companyName, companyDesc, websiteType, category, copy, context } = req.body;
 
   const sWebsiteType = websiteTypeList[websiteType].label;
   const sCategory = portfolioSubList[category].label;
@@ -190,44 +167,43 @@ const getResponseForPortfolioHeroTitle = async (req, res) => {
   const prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"
-    Category: "${sCategory}"
-
-    Write copy for "${sCopy}".
-
-    Examples:
-    Behance: "Showcase Your Creativity. Share your work, connect with peers, and build your online presence."
-    Dribbble: "Design Better. Discover and connect with the world's top designers, and showcase your work."
-    Elon Musk's Portfolio: "Innovating the Future. Discover the mind behind Tesla, SpaceX, and more, and see what's next."
-    Contently: "Storytelling at its Best. Showcase your writing and journalism skills, and connect with top brands."
-    Bill Gates' Portfolio: "Making a Difference. Explore the life and work of the Microsoft co-founder, and see how he's improving the world."`;
-
-  console.log(prompt);
-
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
-    temperature: 0.8,
-    max_tokens: 256,
-    top_p: 1,
-    frequency_penalty: 0.3,
-    presence_penalty: 0.3,
-    best_of: 1,
-  });
-
-  console.log(response.data);
-  if (response.data.choices[0].text) {
-    res.json({
-      message: response.data.choices[0].text.trim(),
+    Category: "${sCategory}"`;
+    if (context) prompt += dedent`Context: ${context}`;
+    prompt += dedent`Generate "${sCopy}".`;
+  
+    console.log(prompt + "\n" + sysMsg.PORTFOLIO_HERO_TITLE);
+  
+    const completion = await openai.createChatCompletion({
+      messages: [
+        {
+          role: "system",
+          content: sysMsg.PORTFOLIO_HERO_TITLE,
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "gpt-3.5-turbo-0301",
+      temperature: 0.8,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0.3,
+      presence_penalty: 0.3,
     });
-  }
-  // res.json({});
-};
+  
+    if(completion.data.choices[0].message.content) {
+      console.log(completion.data.choices[0].message);
+      res.status(200).json({
+          message: completion.data.choices[0].message.content.trim(),
+      });
+    }
+    else throw new Error("Something went wrong");
+});
 
 module.exports = {
   getSaaSGenericResponse,
   getResponseForSaaSHeroTitle,
-  getResponseForSaaSTeamCopy,
-
   getPortfolioGenericResponse,
   getResponseForPortfolioHeroTitle,
 };
