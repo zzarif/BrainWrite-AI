@@ -25,7 +25,7 @@ const getSaaSGenericResponse = asyncHandler(async (req, res) => {
   const sWebsiteType = websiteTypeList[websiteType].label;
   const sCopy = saasCopyList[copy].label;
 
-  const prompt = dedent`Company Name: "${companyName}"
+  let prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"`;
   if (context) prompt += dedent`Context: ${context}`;
@@ -69,7 +69,7 @@ const getResponseForSaaSHeroTitle = asyncHandler(async (req, res) => {
   const sWebsiteType = websiteTypeList[websiteType].label;
   const sCopy = saasCopyList[copy].label;
 
-  const prompt = dedent`Company Name: "${companyName}"
+  let prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"`;
   if (context) prompt += dedent`Context: ${context}`;
@@ -118,7 +118,7 @@ const getPortfolioGenericResponse = asyncHandler(async (req, res) => {
   const sCategory = portfolioSubList[category].label;
   const sCopy = portfolioCopyList[copy].label;
 
-  const prompt = dedent`Company Name: "${companyName}"
+  let prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"
     Category: "${sCategory}"`;
@@ -164,7 +164,7 @@ const getResponseForPortfolioHeroTitle = asyncHandler(async (req, res) => {
   const sCategory = portfolioSubList[category].label;
   const sCopy = portfolioCopyList[copy].label;
 
-  const prompt = dedent`Company Name: "${companyName}"
+  let prompt = dedent`Company Name: "${companyName}"
     Company Description: "${companyDesc}"
     Website Type: "${sWebsiteType}"
     Category: "${sCategory}"`;

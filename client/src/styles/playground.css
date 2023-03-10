@@ -117,3 +117,21 @@
   box-shadow: #3c4fe0 0 3px 7px inset;
   transform: translateY(2px);
 }
+
+.false-div {
+  width: 1rem;
+}
+
+.textarea-box-response {
+  margin-top: 0.3rem;
+  padding: 0.9rem;
+  min-height: 24.8rem;
+  border: 0.05rem solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'TiltNeon';
+  color: #2C3E50;
+  font-size: large;
+  resize: none;
+}

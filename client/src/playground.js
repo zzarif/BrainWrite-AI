@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import AsyncSelect from "react-select/async";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   loadSaaSCopyList,
   loadPortfolioCopyList,
 } from "./helpers/selectDataLoader";
-import "./styles/playground.css";
 import { multiSelectStyle } from "./constants/custom_styles";
 import { UserContext } from "./app";
 import resolveAPI from "./constants/api_endpoints";
+import "./styles/playground.css";
 
 export function Playground() {
   const userContext = useContext(UserContext);
@@ -18,17 +19,27 @@ export function Playground() {
 
   const [response, setResponse] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const getResponse = () => {
-    const data = {
+    setLoading(true);
+
+    let data = {
       companyName: userContext.userState.companyName,
       companyDesc: userContext.userState.companyDesc,
       websiteType: userContext.userState.websiteType,
       copy: copy,
     };
+    if(userContext.userState.category!==-1)
+      data["category"] = userContext.userState.category;
+    if(extraDesc) data["context"] = extraDesc;
+
+    console.log(data);
     
     setTimeout(async () => {
       await Axios.post(resolveAPI(data.websiteType, data.copy), data)
       .then(res => {
+        setLoading(false);
         console.log(res.data.message);
         setResponse(res.data.message);
       });
@@ -76,8 +87,21 @@ export function Playground() {
         >
           GENERATE
         </button>
-
-        <label className="label-text">Response: {response}</label>
+      </div>
+      <div className="false-div"></div>
+      <div className="widget-container">
+        <div className="label-input-container">
+          {loading && (
+              <ClipLoader color={"maroon"} loading={loading} size={12} />
+          )}
+          <label className="label-text">Response</label>
+          
+          <textarea
+            className="textarea-box-response"
+            placeholder="OpenAI Response"
+            value={response}
+          />
+        </div>
       </div>
     </div>
   );

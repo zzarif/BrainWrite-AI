@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import { urls } from "./constants/urls";
@@ -10,6 +10,7 @@ import {
 import { multiSelectStyle } from "./constants/custom_styles";
 import { UserContext } from "./app";
 import { actions } from "./helpers/globalStateManager";
+import { localStorageKeys } from "./constants/localStorageKeys";
 
 export function ProjectDescription() {
   const userContext = useContext(UserContext);
@@ -21,6 +22,13 @@ export function ProjectDescription() {
 
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    if(localStorage.getItem(localStorageKeys.COMPANY_NAME))
+      setCompanyName(localStorage.getItem(localStorageKeys.COMPANY_NAME));
+    if(localStorage.getItem(localStorageKeys.COMPANY_DESC))
+      setCompanyDesc(localStorage.getItem(localStorageKeys.COMPANY_DESC));
+  }, [])
+
   return (
     <div className="container">
       <div className="widget-container">
@@ -30,6 +38,7 @@ export function ProjectDescription() {
           <input
             className="input-box"
             placeholder="Ex: Microsoft"
+            value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
           />
         </div>
@@ -38,6 +47,7 @@ export function ProjectDescription() {
           <textarea
             className="textarea-box"
             placeholder="What your company is about?"
+            value={companyDesc}
             onChange={(e) => setCompanyDesc(e.target.value)}
           />
         </div>
@@ -74,6 +84,10 @@ export function ProjectDescription() {
             userContext.userDispatch({type: actions.COMPANY_DESC, payload: companyDesc});
             userContext.userDispatch({type: actions.WEBSITE_TYPE, payload: websiteType});
             userContext.userDispatch({type: actions.CATEGORY, payload: category});
+
+            localStorage.setItem(localStorageKeys.COMPANY_NAME, companyName);
+            localStorage.setItem(localStorageKeys.COMPANY_DESC, companyDesc);
+
             navigate("/" + urls.PLAYGROUND);
           }}
         >
